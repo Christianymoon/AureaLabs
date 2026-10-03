@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+	color-scheme: light;
+	--page-background: #fcfbf9;
+	--page-foreground: #1a1a1a;
+}
+
+:root[data-theme="dark"] {
+	color-scheme: dark;
+	--page-background: #171714;
+	--page-foreground: #f2f0eb;
+}
+
+html,
+body {
+	min-height: 100%;
+	background-color: var(--page-background);
+	color: var(--page-foreground);
+	transition: background-color 180ms ease, color 180ms ease;
+}
+
+:root[data-theme="dark"] [class*="bg-[#fcfbf9]"] {
+	background-color: #1e1e1a !important;
+}
+
+:root[data-theme="dark"] [class*="bg-[#f0ede6]"] {
+	background-color: #292923 !important;
+}
+
+:root[data-theme="dark"] [class*="text-[#1a1a1a]"],
+:root[data-theme="dark"] [class*="text-[#111110]"],
+:root[data-theme="dark"] [class*="text-[#292524]"] {
+	color: #f2f0eb !important;
+}
+
+:root[data-theme="dark"] [class*="text-[#57534e]"],
+:root[data-theme="dark"] [class*="text-[#78716c]"],
+:root[data-theme="dark"] [class*="text-[#7c7873]"],
+:root[data-theme="dark"] [class*="text-[#44403c]"],
+:root[data-theme="dark"] [class*="text-[#a8a29e]"] {
+	color: #b9b6ad !important;
+}
+
+:root[data-theme="dark"] [class*="border-[#e5e2dc]"],
+:root[data-theme="dark"] [class*="border-[#d6d3cd]"],
+:root[data-theme="dark"] [class*="border-black"] {
+	border-color: #45443d !important;
+}
+
+:root[data-theme="dark"] [class*="bg-white/80"] {
+	background-color: rgb(30 30 26 / 88%) !important;
+}
