@@ -106,6 +106,80 @@ const products = [
     dimensions: '8.5 × 10 × 18 cm',
     finishes: ['Arcilla', 'Blanco'],
   },
+  {
+    id: 'Soporte para gafas de sol y lentes de lectura',
+    name: 'Soporte para gafas de sol y lentes de lectura',
+    category: 'Hogar y decoración',
+    // price: 100,
+    images: [
+      {
+        src: 'https://makerworld.bblmw.com/makerworld/model/US51600a5e583c65/design/fb1c73db77c45dd0.jpg?x-oss-process=image/resize,w_1000/format,webp',
+        alt: 'Soporte para gafas de sol y lentes de lectura',
+      },
+      {
+        src: 'https://makerworld.bblmw.com/makerworld/model/US51600a5e583c65/design/9244dc07588f7844.jpg?x-oss-process=image/resize,w_1000/format,webp',
+        alt: 'Detalle de un soporte para gafas de sol y lentes de lectura',
+      },
+      {
+        src: 'https://makerworld.bblmw.com/makerworld/model/US51600a5e583c65/design/a8a68ac7fe456a12.png?x-oss-process=image/resize,w_1000/format,webp',
+        alt: 'Detalle de un soporte para gafas de sol y lentes de lectura',
+      },
+    ],
+    alt: 'Soporte para gafas de sol y lentes de lectura',
+    description: 'Soporte para gafas de sol y lentes de lectura.',
+    material: 'Acido Polilactico',
+    dimensions: '20 × 1 × 18.2 cm',
+    finishes: ['Negro', 'Blanco', 'Madera'],
+  },
+  {
+    id: 'organizador-de-joyeria',
+    name: 'Organizador de Joyería',
+    category: 'Hogar y decoración',
+    // price: 100,
+    images: [
+      {
+        src: 'https://makerworld.bblmw.com/makerworld/model/USb0c490f3b93ecd/design/2025-12-02_997eb790a0368.jpg?x-oss-process=image/resize,w_1000/format,webp',
+        alt: 'Organizador de Joyería',
+      },
+      {
+        src: 'https://makerworld.bblmw.com/makerworld/model/USb0c490f3b93ecd/design/2025-12-02_3f1c4b05c800b8.jpg?x-oss-process=image/resize,w_1000/format,webp',
+        alt: 'Detalle de un organizar de joyería',
+      },
+      {
+        src: 'https://makerworld.bblmw.com/makerworld/model/USb0c490f3b93ecd/design/2025-12-02_176be553082f08.jpg?x-oss-process=image/resize,w_1000/format,webp',
+        alt: 'Detalle de un organizar de joyería',
+      },
+    ],
+    alt: 'Organizador de Joyería',
+    description: 'Organizador de joyería de diseño minimalista, perfecto para mantener tus accesorios ordenados y protegidos.',
+    material: 'Acido Polilactico',
+    dimensions: '20 × 1 × 18.2 cm',
+  },
+  {
+    id: 'organizador-de-corse',
+    name: 'Organizador de Maquillaje de Corsé Gótico Soporte para Brochas',
+    category: 'Hogar y decoración',
+    // price: 100,
+    images: [
+      {
+        src: 'https://makerworld.bblmw.com/makerworld/model/US19801637f2fc39/design/1bebe07d4aa98b10.png?x-oss-process=image/resize,w_1000/format,webp',
+        alt: 'Organizador de Maquillaje de Corsé Gótico Soporte para Brochas',
+      },
+      {
+        src: 'https://makerworld.bblmw.com/makerworld/model/US19801637f2fc39/design/1bebe07d4aa98b10.png?x-oss-process=image/resize,w_1000/format,webp',
+        alt: 'Detalle de un organizador de maquillaje de corsé gótico',
+      },
+      {
+        src: 'https://makerworld.bblmw.com/makerworld/model/US19801637f2fc39/design/6ba0be952bd069d4.png?x-oss-process=image/resize,w_1000/format,webp',
+        alt: 'Detalle de un organizador de maquillaje de corsé gótico',
+      },
+    ],
+    alt: 'Organizador de Maquillaje de Corsé Gótico Soporte para Brochas',
+    description: 'Organizador de maquillaje de corsé gótico, soporte para brochas.',
+    material: 'Acido Polilactico',
+    dimensions: '20 × 1 × 18.2 cm',
+  },
+  
 ];
 
 export default function Products({ onSelectProduct }) {
@@ -155,7 +229,7 @@ export default function Products({ onSelectProduct }) {
                   <span className="mt-1 block text-sm text-[#78716c]">{product.category}</span>
                 </span>
                 <span className="shrink-0 text-sm font-medium">
-                  ${product.price.toLocaleString('es-MX')} MXN
+                  {product.price ? `$ ${product.price.toLocaleString('es-MX')} MXN` : ''}
                 </span>
               </button>
             </article>

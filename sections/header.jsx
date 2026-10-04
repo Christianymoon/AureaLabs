@@ -4,6 +4,7 @@ export default function Header({
   cartItems = [],
   onUpdateQuantity,
   onRemoveFromCart,
+  onBeginCheckout,
   theme = 'light',
   onToggleTheme,
 }) {
@@ -133,6 +134,7 @@ export default function Header({
                   </div>
                   <a
                     href={orderLink}
+                    onClick={onBeginCheckout}
                     className="mt-4 flex min-h-12 items-center justify-center bg-[#111110] px-5 py-3 text-center text-xs uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#333]"
                   >
                     Hacer pedido

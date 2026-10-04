@@ -23,6 +23,7 @@ export default function ProductOverview({
   product = defaultProduct,
   onBack,
   onAddToCart,
+  onCustomOrder,
   theme = 'light',
   onToggleTheme,
 }) {
@@ -34,6 +35,11 @@ export default function ProductOverview({
     onAddToCart(product, quantity, selectedFinish);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 2000);
+  }
+
+  function requestCustomOrder() {
+    onCustomOrder?.(product);
+    window.location.href = 'mailto:?subject=Quiero%20una%20pieza%20de%20Aurea%20Labs&body=Hola,%20me%20interesa%20hacer%20un%20pedido.';
   }
 
   return (
@@ -85,7 +91,7 @@ export default function ProductOverview({
             </h1>
 
             <p className="mt-5 text-2xl font-light">
-              ${Number(product.price).toLocaleString('es-MX')} MXN
+              {product.price ? `$ ${Number(product.price).toLocaleString('es-MX')} MXN` : 'Precio sobre Pedido'}
             </p>
 
             <p className="mt-8 max-w-xl text-base leading-7 text-[#57534e]">
@@ -156,7 +162,7 @@ export default function ProductOverview({
 
             <button
                 type="button"
-                onClick={() => window.location.href = 'mailto:?subject=Quiero%20una%20pieza%20de%20Aurea%20Labs&body=Hola,%20me%20interesa%20hacer%20un%20pedido.'}
+              onClick={requestCustomOrder}
                 className="mt-2 cursor-pointer w-full bg-[#111110] px-8 py-4 text-xs uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#333] focus:outline-none focus:ring-2 focus:ring-[#78716c] focus:ring-offset-2 sm:w-auto"
             >
             Quiero una versión personalizada
