@@ -1,12 +1,13 @@
 import './App.css'
 import { useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Header from '../sections/header.jsx'
 import Products from '../sections/products.jsx'
 import { products } from '../data/products.js'
 import Footer from '../sections/footer.jsx'
 import ProductOverview from '../pages/product_overview.jsx'
 import ReactGA from 'react-ga4'
+import usePageMetadata from './usePageMetadata.js'
 
 ReactGA.initialize("G-2JTJY4X8CZ");
 ReactGA.send({ hitType: "pageview", page: window.location.pathname + window.location.search });
@@ -31,6 +32,10 @@ function ProductRoute({ onBack, onAddToCart, onCustomOrder, theme, onToggleTheme
 
 function App() {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const currentProduct = products.find(
+    (product) => pathname === `/producto/${encodeURIComponent(product.id)}`,
+  )
   const [cartItems, setCartItems] = useState([])
   const [theme, setTheme] = useState(() =>
     window.localStorage.getItem('aurea-theme') === 'dark' ? 'dark' : 'light',
@@ -40,6 +45,8 @@ function App() {
     document.documentElement.dataset.theme = theme
     window.localStorage.setItem('aurea-theme', theme)
   }, [theme])
+
+  usePageMetadata(currentProduct)
 
   function toggleTheme() {
     setTheme((currentTheme) => (currentTheme === 'light' ? 'dark' : 'light'))
