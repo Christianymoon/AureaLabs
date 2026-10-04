@@ -1,13 +1,36 @@
 import './App.css'
 import { useEffect, useState } from 'react'
+import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import Header from '../sections/header.jsx'
 import Products from '../sections/products.jsx'
+import { products } from '../data/products.js'
 import Footer from '../sections/footer.jsx'
 import ProductOverview from '../pages/product_overview.jsx'
 import ReactGA from 'react-ga4'
 
+ReactGA.initialize("G-2JTJY4X8CZ");
+ReactGA.send({ hitType: "pageview", page: window.location.pathname + window.location.search });
+
+function ProductRoute({ onBack, onAddToCart, onCustomOrder, theme, onToggleTheme }) {
+  const { productId } = useParams()
+  const product = products.find((item) => item.id === productId)
+
+  if (!product) return <Navigate to="/" replace />
+
+  return (
+    <ProductOverview
+      product={product}
+      onBack={onBack}
+      onAddToCart={onAddToCart}
+      onCustomOrder={onCustomOrder}
+      theme={theme}
+      onToggleTheme={onToggleTheme}
+    />
+  )
+}
+
 function App() {
-  const [selectedProduct, setSelectedProduct] = useState(null)
+  const navigate = useNavigate()
   const [cartItems, setCartItems] = useState([])
   const [theme, setTheme] = useState(() =>
     window.localStorage.getItem('aurea-theme') === 'dark' ? 'dark' : 'light',
@@ -17,15 +40,6 @@ function App() {
     document.documentElement.dataset.theme = theme
     window.localStorage.setItem('aurea-theme', theme)
   }, [theme])
-
-  useEffect(() => {
-    function handleHistoryChange(event) {
-      setSelectedProduct(event.state?.view === 'product' ? event.state.product : null)
-    }
-
-    window.addEventListener('popstate', handleHistoryChange)
-    return () => window.removeEventListener('popstate', handleHistoryChange)
-  }, [])
 
   function toggleTheme() {
     setTheme((currentTheme) => (currentTheme === 'light' ? 'dark' : 'light'))
@@ -94,40 +108,42 @@ function App() {
       label: product.name,
     })
 
-    window.history.pushState(
-      { view: 'product', product },
-      '',
-      `#producto/${encodeURIComponent(product.id)}`,
-    )
-    setSelectedProduct(product)
-  }
-
-  if (selectedProduct) {
-    return (
-      <ProductOverview
-        product={selectedProduct}
-        onBack={() => window.history.back()}
-        onAddToCart={addToCart}
-        onCustomOrder={requestCustomOrder}
-        theme={theme}
-        onToggleTheme={toggleTheme}
-      />
-    )
+    navigate(`/producto/${encodeURIComponent(product.id)}`)
   }
 
   return (
-    <>
-      <Header
-        cartItems={cartItems}
-        onUpdateQuantity={updateCartQuantity}
-        onRemoveFromCart={removeFromCart}
-        onBeginCheckout={beginCheckout}
-        theme={theme}
-        onToggleTheme={toggleTheme}
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <>
+            <Header
+              cartItems={cartItems}
+              onUpdateQuantity={updateCartQuantity}
+              onRemoveFromCart={removeFromCart}
+              onBeginCheckout={beginCheckout}
+              theme={theme}
+              onToggleTheme={toggleTheme}
+            />
+            <Products onSelectProduct={openProduct} />
+            <Footer onCustomOrder={requestCustomOrder} />
+          </>
+        }
       />
-      <Products onSelectProduct={openProduct} />
-      <Footer onCustomOrder={requestCustomOrder} />
-    </>
+      <Route
+        path="/producto/:productId"
+        element={
+          <ProductRoute
+            onBack={() => navigate('/')}
+            onAddToCart={addToCart}
+            onCustomOrder={requestCustomOrder}
+            theme={theme}
+            onToggleTheme={toggleTheme}
+          />
+        }
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 
