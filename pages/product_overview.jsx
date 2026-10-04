@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ProductCarousel from '../components/ProductCarousel.jsx';
+import ReactGA from 'react-ga4';
 
 const defaultProduct = {
   name: 'Jarrón Origen',
@@ -30,6 +31,18 @@ export default function ProductOverview({
   const [quantity, setQuantity] = useState(1);
   const [selectedFinish, setSelectedFinish] = useState(product.finishes?.[0] || '');
   const [added, setAdded] = useState(false);
+  const viewedProductId = useRef(null);
+
+  useEffect(() => {
+    if (viewedProductId.current === product.id) return;
+
+    viewedProductId.current = product.id;
+    ReactGA.event('view_item', {
+      category: 'Productos',
+      action: 'Ver ficha',
+      label: product.name,
+    });
+  }, [product.id, product.name]);
 
   function addToCart() {
     onAddToCart(product, quantity, selectedFinish);
