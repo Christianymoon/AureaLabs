@@ -27,44 +27,16 @@ function App() {
     return () => window.removeEventListener('popstate', handleHistoryChange)
   }, [])
 
-  useEffect(() => {
-    if (!selectedProduct) return
-
-    ReactGA.event('select_item', {
-      item_list_name: 'Colección 01',
-      items: [
-        {
-          item_id: selectedProduct.id,
-          item_name: selectedProduct.name,
-          item_category: selectedProduct.category,
-          ...(selectedProduct.price
-            ? { price: selectedProduct.price, currency: 'MXN' }
-            : {}),
-        },
-      ],
-    })
-  }, [selectedProduct])
-
   function toggleTheme() {
     setTheme((currentTheme) => (currentTheme === 'light' ? 'dark' : 'light'))
   }
 
   function addToCart(product, quantity, finish) {
     const cartKey = `${product.id}:${finish}`
-    const hasPrice = Number.isFinite(Number(product.price))
-
-    ReactGA.event('add_to_cart', {
-      ...(hasPrice ? { currency: 'MXN', value: Number(product.price) * quantity } : {}),
-      items: [
-        {
-          item_id: product.id || product.name,
-          item_name: product.name,
-          item_category: product.category,
-          item_variant: finish,
-          quantity,
-          ...(hasPrice ? { price: Number(product.price) } : {}),
-        },
-      ],
+    ReactGA.event({
+      category: 'Carrito',
+      action: 'Añadir producto',
+      label: product.name,
     })
 
     setCartItems((currentItems) => {
@@ -83,40 +55,18 @@ function App() {
   }
 
   function beginCheckout() {
-    const hasPrices = cartItems.every((item) => Number.isFinite(Number(item.price)))
-
-    ReactGA.event('begin_checkout', {
-      ...(hasPrices
-        ? {
-            currency: 'MXN',
-            value: cartItems.reduce((total, item) => total + Number(item.price) * item.quantity, 0),
-          }
-        : {}),
-      items: cartItems.map((item) => ({
-        item_id: item.id || item.name,
-        item_name: item.name,
-        item_category: item.category,
-        item_variant: item.finish,
-        quantity: item.quantity,
-        ...(Number.isFinite(Number(item.price)) ? { price: Number(item.price) } : {}),
-      })),
+    ReactGA.event({
+      category: 'Pedido',
+      action: 'Hacer pedido',
+      label: cartItems.map((item) => item.name).join(', '),
     })
   }
 
   function requestCustomOrder(product) {
-    ReactGA.event('request_custom_order', {
-      method: 'email',
-      ...(product
-        ? {
-            items: [
-              {
-                item_id: product.id || product.name,
-                item_name: product.name,
-                item_category: product.category,
-              },
-            ],
-          }
-        : {}),
+    ReactGA.event({
+      category: 'Pedido personalizado',
+      action: 'Solicitar por correo',
+      label: product?.name || 'General',
     })
   }
 
@@ -139,6 +89,12 @@ function App() {
   }
 
   function openProduct(product) {
+    ReactGA.event({
+      category: 'Productos',
+      action: 'Ver producto',
+      label: product.name,
+    })
+
     window.history.pushState(
       { view: 'product', product },
       '',
