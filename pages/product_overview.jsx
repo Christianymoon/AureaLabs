@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import ProductCarousel from '../components/ProductCarousel.jsx';
 import ReactGA from 'react-ga4';
+import { createWhatsAppLink } from '../utils/whatsapp.js';
+import { createEcommerceItem, createEcommerceParams } from '../src/ecommerceAnalytics.js';
 
 const defaultProduct = {
   name: 'Jarrón Origen',
@@ -31,28 +33,33 @@ export default function ProductOverview({
   const [quantity, setQuantity] = useState(1);
   const [selectedFinish, setSelectedFinish] = useState(product.finishes?.[0] || '');
   const [added, setAdded] = useState(false);
+  const productId = product.id;
+  const productName = product.name;
+  const productCategory = product.category;
+  const productPrice = product.price;
   const viewedProductId = useRef(null);
 
   useEffect(() => {
-    if (viewedProductId.current === product.id) return;
+    if (viewedProductId.current === productId) return;
 
-    viewedProductId.current = product.id;
-    ReactGA.event('view_item', {
-      category: 'Productos',
-      action: 'Ver ficha',
-      label: product.name,
-    });
-  }, [product.id, product.name]);
+    viewedProductId.current = productId;
+    ReactGA.event(
+      'view_item',
+      createEcommerceParams([
+        createEcommerceItem({
+          id: productId,
+          name: productName,
+          category: productCategory,
+          price: productPrice,
+        }),
+      ]),
+    );
+  }, [productId, productName, productCategory, productPrice]);
 
   function addToCart() {
     onAddToCart(product, quantity, selectedFinish);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 2000);
-  }
-
-  function requestCustomOrder() {
-    onCustomOrder?.(product);
-    window.location.href = 'mailto:?subject=Quiero%20una%20pieza%20de%20Aurea%20Labs&body=Hola,%20me%20interesa%20hacer%20un%20pedido.';
   }
 
   return (
@@ -173,13 +180,15 @@ export default function ProductOverview({
               {added ? 'Añadido al carrito ✓' : 'Añadir al carrito'}
             </button>
 
-            <button
-                type="button"
-              onClick={requestCustomOrder}
-                className="mt-2 cursor-pointer w-full bg-[#111110] px-8 py-4 text-xs uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#333] focus:outline-none focus:ring-2 focus:ring-[#78716c] focus:ring-offset-2 sm:w-auto"
+            <a
+              href={createWhatsAppLink(`Hola, me interesa hacer un pedido personalizado de ${product.name}. ¿Podrían darme más información?`)}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => onCustomOrder?.(product)}
+              className="mt-2 inline-flex w-full items-center justify-center bg-[#111110] px-8 py-4 text-center text-xs uppercase tracking-[0.2em] text-white transition-colors hover:bg-[#333] focus:outline-none focus:ring-2 focus:ring-[#78716c] focus:ring-offset-2 sm:w-auto"
             >
-            Quiero una versión personalizada
-            </button>
+              Quiero una versión personalizada
+            </a>
 
             <p className="mt-3 text-sm text-[#78716c]" aria-live="polite">
               {added ? 'La pieza se agregó a tu carrito.' : 'Fabricado bajo pedido en México.'}

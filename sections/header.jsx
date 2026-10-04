@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { createWhatsAppLink } from '../utils/whatsapp.js';
 
 export default function Header({
   cartItems = [],
   onUpdateQuantity,
   onRemoveFromCart,
-  onBeginCheckout,
+  requestOrder,
   theme = 'light',
   onToggleTheme,
 }) {
@@ -14,7 +15,7 @@ export default function Header({
   const orderBody = cartItems
     .map((item) => `${item.quantity} × ${item.name} (${item.finish}) — $${(item.price * item.quantity).toLocaleString('es-MX')} MXN`)
     .join('\n');
-  const orderLink = `mailto:?subject=${encodeURIComponent('Pedido Aurea Labs')}&body=${encodeURIComponent(`Hola, quiero realizar este pedido:\n\n${orderBody}\n\nTotal: $${cartTotal.toLocaleString('es-MX')} MXN`)}`;
+  const orderLink = createWhatsAppLink(`Hola, quiero realizar este pedido:\n\n${orderBody}\n\nTotal: $${cartTotal.toLocaleString('es-MX')} MXN`);
 
   return (
     <header className="w-full bg-[#fcfbf9] text-[#1a1a1a] min-h-screen flex flex-col justify-between">
@@ -134,7 +135,9 @@ export default function Header({
                   </div>
                   <a
                     href={orderLink}
-                    onClick={onBeginCheckout}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={requestOrder}
                     className="mt-4 flex min-h-12 items-center justify-center bg-[#111110] px-5 py-3 text-center text-xs uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#333]"
                   >
                     Hacer pedido

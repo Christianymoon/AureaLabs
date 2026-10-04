@@ -1,6 +1,9 @@
+import { createWhatsAppLink } from '../utils/whatsapp.js';
+
 export default function Footer({ onCustomOrder }) {
-  const orderLink =
-    'mailto:?subject=Quiero%20una%20pieza%20de%20Aurea%20Labs&body=Hola,%20me%20interesa%20hacer%20un%20pedido.';
+  const orderLink = createWhatsAppLink(
+    'Hola, me interesa una pieza personalizada de Aurea Labs. ¿Podrían darme más información?',
+  );
 
   return (
     <footer
@@ -39,6 +42,8 @@ export default function Footer({ onCustomOrder }) {
           <div>
             <a
               href={orderLink}
+              target="_blank"
+              rel="noreferrer"
               onClick={() => onCustomOrder?.()}
               className="inline-flex items-center justify-center border border-[#111110] bg-[#111110] px-8 py-4 text-xs uppercase tracking-[0.2em] text-white transition-colors duration-300 hover:bg-transparent hover:text-[#111110] focus:outline-none focus:ring-2 focus:ring-[#78716c] focus:ring-offset-2"
             >

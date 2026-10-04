@@ -8,6 +8,7 @@ import Footer from '../sections/footer.jsx'
 import ProductOverview from '../pages/product_overview.jsx'
 import ReactGA from 'react-ga4'
 import usePageMetadata from './usePageMetadata.js'
+import { createEcommerceItem, createEcommerceParams } from './ecommerceAnalytics.js'
 
 ReactGA.initialize("G-2JTJY4X8CZ");
 ReactGA.send({ hitType: "pageview", page: window.location.pathname + window.location.search });
@@ -54,11 +55,10 @@ function App() {
 
   function addToCart(product, quantity, finish) {
     const cartKey = `${product.id}:${finish}`
-    ReactGA.event({
-      category: 'Carrito',
-      action: 'Añadir producto',
-      label: product.name,
-    })
+    ReactGA.event(
+      'add_to_cart',
+      createEcommerceParams([createEcommerceItem(product, quantity, finish)]),
+    )
 
     setCartItems((currentItems) => {
       const existingItem = currentItems.find((item) => item.cartKey === cartKey)
@@ -75,19 +75,21 @@ function App() {
     })
   }
 
-  function beginCheckout() {
-    ReactGA.event({
-      category: 'Pedido',
-      action: 'Hacer pedido',
-      label: cartItems.map((item) => item.name).join(', '),
-    })
+  function requestOrder() {
+    ReactGA.event(
+      'begin_checkout',
+      createEcommerceParams(
+        cartItems.map((item) => createEcommerceItem(item, item.quantity, item.finish)),
+      ),
+    )
   }
 
   function requestCustomOrder(product) {
-    ReactGA.event({
-      category: 'Pedido personalizado',
-      action: 'Solicitar por correo',
-      label: product?.name || 'General',
+    ReactGA.event('custom_order_request', {
+      method: 'WhatsApp',
+      ...(product
+        ? createEcommerceParams([createEcommerceItem(product)])
+        : {}),
     })
   }
 
@@ -104,15 +106,25 @@ function App() {
   }
 
   function removeFromCart(cartKey) {
+    const removedItem = cartItems.find((item) => item.cartKey === cartKey)
     setCartItems((currentItems) =>
       currentItems.filter((item) => item.cartKey !== cartKey),
     )
+
+    if (removedItem) {
+      ReactGA.event(
+        'remove_from_cart',
+        createEcommerceParams([
+          createEcommerceItem(removedItem, removedItem.quantity, removedItem.finish),
+        ]),
+      )
+    }
   }
 
   function openProduct(product) {
-    ReactGA.event('click_on_product', {
-      category: 'Productos',
-      label: product.name,
+    ReactGA.event('select_item', {
+      item_list_name: 'Colección 01',
+      items: [createEcommerceItem(product)],
     })
 
     navigate(`/producto/${encodeURIComponent(product.id)}`)
@@ -128,7 +140,7 @@ function App() {
               cartItems={cartItems}
               onUpdateQuantity={updateCartQuantity}
               onRemoveFromCart={removeFromCart}
-              onBeginCheckout={beginCheckout}
+              requestOrder={requestOrder}
               theme={theme}
               onToggleTheme={toggleTheme}
             />
