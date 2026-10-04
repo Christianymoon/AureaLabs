@@ -89,9 +89,8 @@ function App() {
   }
 
   function openProduct(product) {
-    ReactGA.event({
+    ReactGA.event('click_on_product', {
       category: 'Productos',
-      action: 'Ver producto',
       label: product.name,
     })
 
