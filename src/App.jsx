@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Header from '../sections/header.jsx'
 import Products from '../sections/products.jsx'
@@ -33,7 +33,8 @@ function ProductRoute({ onBack, onAddToCart, onCustomOrder, theme, onToggleTheme
 
 function App() {
   const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
+  const trackedPageRef = useRef(null)
   const currentProduct = products.find(
     (product) => pathname === `/producto/${encodeURIComponent(product.id)}`,
   )
@@ -41,6 +42,15 @@ function App() {
   const [theme, setTheme] = useState(() =>
     window.localStorage.getItem('aurea-theme') === 'dark' ? 'dark' : 'light',
   )
+
+  useEffect(() => {
+    const page = pathname + search
+    if (trackedPageRef.current === page) return;
+
+    trackedPageRef.current = page
+    ReactGA.send({ hitType: "pageview", page });
+
+  }, [pathname, search])
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -77,7 +87,7 @@ function App() {
 
   function requestOrder() {
     ReactGA.event(
-      'begin_checkout',
+      'whatsapp_order_request',
       createEcommerceParams(
         cartItems.map((item) => createEcommerceItem(item, item.quantity, item.finish)),
       ),
