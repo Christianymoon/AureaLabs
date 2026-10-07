@@ -3,7 +3,6 @@ export const products = [
     id: 'colgador',
     name: 'Colgador con bloqueo automatico, Gancho de pared para toallas.',
     category: 'Hogar y decoración',
-    price: 50,
     images: [
       { src: 'https://makerworld.bblmw.com/makerworld/model/USc05b7824e37a44/design/2025-11-27_ea4e1ac2bd5808.jpg?x-oss-process=image%2Fformat%2Cwebp', alt: 'Colgador con bloqueo automático, Gancho de pared para toallas' },
       { src: 'https://makerworld.bblmw.com/makerworld/model/USc05b7824e37a44/design/2025-11-27_c6720654e7daf.jpg?x-oss-process=image/resize,w_1000/format,webp', alt: 'Detalle de un colgador con bloqueo automático, Gancho de pared para toallas' },
@@ -19,7 +18,6 @@ export const products = [
     id: 'jarron-origen',
     name: 'Jarrón Japandi Shizu',
     category: 'Hogar y decoración',
-    price: 250,
     images: [
       { src: 'https://makerworld.bblmw.com/makerworld/model/US5c25d8e674ed1f/design/2025-08-03_22ec4b76775e48.png?x-oss-process=image/resize,w_1000/format,webp', alt: 'Jarrón japandi Shizu de diseño minimalista' },
       { src: 'https://makerworld.bblmw.com/makerworld/model/US5c25d8e674ed1f/design/2025-08-03_9b745d1977221.png?x-oss-process=image/resize,w_1000/format,webp', alt: 'Jarrón decorativo visto en un interior sereno' },
@@ -35,7 +33,6 @@ export const products = [
     id: 'lampara-bola',
     name: 'Lámpara de bola',
     category: 'Iluminación',
-    price: 180,
     images: [
       { src: 'https://makerworld.bblmw.com/makerworld/model/USc86a687dc75b62/design/2095604291bb734d.png?x-oss-process=image/resize,w_1000/format,webp', alt: 'Objeto decorativo de cerámica sobre una mesa' },
       { src: 'https://makerworld.bblmw.com/makerworld/model/USc86a687dc75b62/design/ab4c502c128323d8.png?x-oss-process=image/resize,w_1000/format,webp', alt: 'Pieza decorativa de formas orgánicas' },
@@ -51,7 +48,6 @@ export const products = [
     id: 'reno-decoracion',
     name: 'Reno de Decoración',
     category: 'Hogar y decoración',
-    price: 100,
     images: [
       { src: 'https://makerworld.bblmw.com/makerworld/model/USbb62ad6d2258eb/design/a4297b97b30388c8.jpeg?x-oss-process=image/resize,w_1000/format,webp', alt: 'Reno de Decoración' },
       { src: 'https://makerworld.bblmw.com/makerworld/model/USbb62ad6d2258eb/design/1361950a8b5732ff.jpeg?x-oss-process=image/resize,w_1000/format,webp', alt: 'Detalle de un reno de decoración' },
